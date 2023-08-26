@@ -6,6 +6,8 @@ import "./loadEnvironment.mjs";
 import express from 'express';
 import cors from 'cors';
 
+import db from './db/connect.mjs';
+
 const app = express();
 const port = 4000;
 
@@ -49,9 +51,11 @@ const EDUCATION_DATA = [
   },
 ];
 
-app.get('/api/skills', (req, res) => {
-
-  res.send(SKILLS_DATA)
+app.get('/api/skills', async (req, res) => {
+  let collection = await db.collection("skills");
+  let results = await collection.find({})
+  // results && console.log(results);
+  res.send(results).status(200);
 });
 
 app.get('/api/educations', (req, res) => res.send(EDUCATION_DATA));
