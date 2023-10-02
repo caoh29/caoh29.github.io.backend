@@ -2,14 +2,15 @@
 
 // loadEnvironments();
 
-import "./loadEnvironment.mjs";
+import 'dotenv/config'
+import './loadEnvironment.mjs';
 import express from 'express';
 import cors from 'cors';
 
 import db from './db/connect.mjs';
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT;
 
 app.use(cors({ origin: 'http://localhost:3000' }));
 
@@ -44,5 +45,5 @@ app.post('/api/educations', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:4000`)
+  console.log(`Server is running on http://localhost:${port}`)
 });
