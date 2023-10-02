@@ -12,7 +12,7 @@ import db from './db/connect.mjs';
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://caoh29.github.io/inner' }));
 
 app.use(express.json());
 
