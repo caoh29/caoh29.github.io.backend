@@ -4,16 +4,20 @@ import nodemailer from 'nodemailer';
 // import cors from 'cors';
 
 const app = express();
-const port = process.env.APP_PORT;
-
-// app.use(cors({ origin: 'https://caoh29.dev' }));
+const port = process.env.PORT;
 
 app.use(express.static('public'));
 
 app.use(express.json());
 
-app.get('*', (req, res) => {
-  res.sendFile('index.html', { root: 'public' });
+app.use((req, res, next) => {
+  const host = req.hostname.toLowerCase();
+
+  if (host === 'caoh29.dev' || host === 'www.caoh29.dev') {
+    return res.redirect(301, 'https://portfolio.caoh29.dev');
+  }
+
+  next();
 });
 
 app.post('/api/contact', async (req, res) => {
@@ -53,7 +57,11 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+app.get('*', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
 
-app.listen(port, () => {
+
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on ${process.env.HOSTNAME}:${port}`)
 });
