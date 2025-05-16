@@ -1,18 +1,25 @@
 import 'dotenv/config'
 import express from 'express';
 import nodemailer from 'nodemailer';
-import cors from 'cors';
+// import cors from 'cors';
 
 const app = express();
 const port = process.env.APP_PORT;
 
-app.use(cors({ origin: 'https://caoh29.dev' }));
+// app.use(cors({ origin: 'https://caoh29.dev' }));
+
+app.use(express.static('public'));
 
 app.use(express.json());
 
+app.get('*', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
 
-app.post('/contact', async (req, res) => {
+app.post('/api/contact', async (req, res) => {
   const { name, email, subject, message } = req.body;
+
+  console.log(req.body);
 
   if (!name || !email || !subject || !message) {
     return res.status(400).json({ error: 'Missing fields' });
@@ -34,11 +41,7 @@ app.post('/contact', async (req, res) => {
       from: `"${name}" <${email}>`,
       to: process.env.MAILER_TO,
       subject: `[Portfolio Contact] ${subject}`,
-      text: `
-      Name: ${name}
-      Email: ${email}
-      Message: ${message}
-      `,
+      text: `Name: ${name}\nEmail: ${email}\nMessage:\n${message}`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -52,5 +55,5 @@ app.post('/contact', async (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`Server is running on ${process.env.HOST}:${port}`)
+  console.log(`Server is running on ${process.env.HOSTNAME}:${port}`)
 });
