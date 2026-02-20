@@ -53,6 +53,8 @@ app.post('/api/contact', async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
+    console.log(`>> SENDING EMAIL: name ->${name}; email -> ${email}; subject -> ${subject}`);
+
     res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
     console.error('Email error:', error);
