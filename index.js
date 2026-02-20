@@ -36,8 +36,11 @@ app.post('/api/contact', async (req, res) => {
       service: process.env.MAILER_SERVICE, 
       secure: Number(process.env.MAILER_PORT) === 465,
       auth: {
+        type: 'OAUTH2',
         user: process.env.MAILER_USER,
-        pass: process.env.MAILER_PASS
+        clientId: process.env.MAILER_CLIENT_ID,
+        clientSecret: process.env.MAILER_CLIENT_SECRET,
+        // refreshToken: process.env.MAILER_REFRESH_TOKEN,
       }
     });
 
